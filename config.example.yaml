@@ -1,0 +1,13 @@
+applicationId: "1206315369430519819"
+
+username: "" # Your RailMiles username
+url: ""      # Your RailMiles public site URL
+
+mode: "solo" # Can be solo or league
+league: 0    # If mode is league, this is the league ID
+
+messages:
+  topSoloMessage: "{mi} miles and {ch} chains"
+  bottomSoloMessage: "{place} place - {mi}mi and {ch}ch in {year}"
+  topLeagueMessage: "{place} place - {mi}mi and {ch}ch in {year}"
+  bottomLeagueMessage: "Competing in {leagueName}"
