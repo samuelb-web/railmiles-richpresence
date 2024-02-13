@@ -293,7 +293,7 @@ func updateMiles(config Config) {
 }
 
 func trayReady(config Config) {
-	systray.SetTemplateIcon(icon.Data, icon.Data)
+	systray.SetIcon(icon.Data)
 	systray.SetTitle("RailMiles Rich Presence")
 	systray.SetTooltip("RailMiles Rich Presence")
 
@@ -311,7 +311,9 @@ func trayReady(config Config) {
 		select {
 		case <-forceUpdateBtn.ClickedCh:
 			forceUpdateBtn.Disable()
+			fmt.Println("Updating miles (manually)...")
 			updateMiles(config)
+			fmt.Println("Updated miles. Cooldown starting.")
 			time.Sleep(10 * time.Second)
 			forceUpdateBtn.Enable()
 		}
@@ -356,7 +358,7 @@ func main() {
 	})
 
 	// Create system tray icon
-	systray.Run(func() { trayReady(config) }, func() {})
+	systray.Run(func() { trayReady(config) }, func() { os.Exit(0) })
 
 	go c.Start()
 
