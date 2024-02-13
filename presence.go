@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"math"
@@ -14,7 +15,10 @@ import (
 
 	"net/http"
 
+	"github.com/samuelb-web/railmiles-richpresence/icon"
+
 	"github.com/PuerkitoBio/goquery"
+	"github.com/getlantern/systray"
 	"github.com/hugolgst/rich-go/client"
 	"github.com/robfig/cron"
 	"gopkg.in/yaml.v3"
@@ -288,6 +292,32 @@ func updateMiles(config Config) {
 	}
 }
 
+func trayReady(config Config) {
+	systray.SetTemplateIcon(icon.Data, icon.Data)
+	systray.SetTitle("RailMiles Rich Presence")
+	systray.SetTooltip("RailMiles Rich Presence")
+
+	forceUpdateBtn := systray.AddMenuItem("Update Miles", "Manually updates your RailMiles")
+
+	btnQuit := systray.AddMenuItem("Close", "Close Rich Presence")
+	go func() {
+		<-btnQuit.ClickedCh
+		fmt.Println("Attempting to close...")
+		systray.Quit()
+		fmt.Println("Closed successfully")
+	}()
+
+	for {
+		select {
+		case <-forceUpdateBtn.ClickedCh:
+			forceUpdateBtn.Disable()
+			updateMiles(config)
+			time.Sleep(10 * time.Second)
+			forceUpdateBtn.Enable()
+		}
+	}
+}
+
 // Entrypoint
 func main() {
 	// Load the configuration file
@@ -315,6 +345,9 @@ func main() {
 		return
 	}
 
+	// Create system tray icon
+	systray.Run(func() { trayReady(config) }, func() {})
+
 	// Update the miles
 	updateMiles(config)
 
@@ -331,4 +364,5 @@ func main() {
 	sig := make(chan os.Signal)
 	signal.Notify(sig, os.Interrupt, os.Kill)
 	<-sig
+	systray.Quit()
 }
