@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"math"
@@ -302,18 +301,18 @@ func trayReady(config Config) {
 	btnQuit := systray.AddMenuItem("Close", "Close Rich Presence")
 	go func() {
 		<-btnQuit.ClickedCh
-		fmt.Println("Attempting to close...")
+		log.Println("Attempting to close...")
 		systray.Quit()
-		fmt.Println("Closed successfully")
+		log.Println("Closed successfully")
 	}()
 
 	for {
 		select {
 		case <-forceUpdateBtn.ClickedCh:
 			forceUpdateBtn.Disable()
-			fmt.Println("Updating miles (manually)...")
+			log.Println("Updating miles (manually)...")
 			updateMiles(config)
-			fmt.Println("Updated miles. Cooldown starting.")
+			log.Println("Updated miles. Cooldown starting.")
 			time.Sleep(10 * time.Second)
 			forceUpdateBtn.Enable()
 		}
@@ -357,10 +356,10 @@ func main() {
 		updateMiles(config)
 	})
 
-	// Create system tray icon
-	systray.Run(func() { trayReady(config) }, func() { os.Exit(0) })
-
 	go c.Start()
+
+	// Create system tray icon
+	go systray.Run(func() { trayReady(config) }, func() { os.Exit(0) })
 
 	// Wait for signal to exit
 	sig := make(chan os.Signal)
