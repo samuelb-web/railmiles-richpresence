@@ -178,7 +178,9 @@ func updateMiles(config Config) {
 		leagueData := getLeagueData(config)
 
 		// Build the top message
+
 		topMessage := config.Messages.TopLeagueMessage
+		topMessage = strings.ReplaceAll(topMessage, "{leagueName}", leagueData.Name)
 		topMessage = strings.ReplaceAll(topMessage, "{place}", strconv.Itoa(leagueData.CurrentUser.Position)+getPositionSuffix(leagueData.CurrentUser.Position))
 		topMessage = strings.ReplaceAll(topMessage, "{mi}", strconv.Itoa(leagueData.CurrentUser.Miles))
 		topMessage = strings.ReplaceAll(topMessage, "{ch}", strconv.Itoa(leagueData.CurrentUser.Chains))
@@ -187,6 +189,10 @@ func updateMiles(config Config) {
 		// Build the bottom message
 		bottomMessage := config.Messages.BottomLeagueMessage
 		bottomMessage = strings.ReplaceAll(bottomMessage, "{leagueName}", leagueData.Name)
+		bottomMessage = strings.ReplaceAll(bottomMessage, "{place}", strconv.Itoa(leagueData.CurrentUser.Position)+getPositionSuffix(leagueData.CurrentUser.Position))
+		bottomMessage = strings.ReplaceAll(bottomMessage, "{mi}", strconv.Itoa(leagueData.CurrentUser.Miles))
+		bottomMessage = strings.ReplaceAll(bottomMessage, "{ch}", strconv.Itoa(leagueData.CurrentUser.Chains))
+		bottomMessage = strings.ReplaceAll(bottomMessage, "{year}", strconv.Itoa(year))
 
 		// Update the Rich Presence
 		err := client.SetActivity(client.Activity{
@@ -218,12 +224,15 @@ func updateMiles(config Config) {
 
 		// Build the top message
 		topMessage := config.Messages.TopSoloMessage
+		topMessage = strings.ReplaceAll(topMessage, "{year}", strconv.Itoa(year))
 		topMessage = strings.ReplaceAll(topMessage, "{mi}", strconv.Itoa(individualData.Miles))
 		topMessage = strings.ReplaceAll(topMessage, "{ch}", strconv.Itoa(individualData.Chains))
 
 		// Build the bottom message
 		bottomMessage := config.Messages.BottomSoloMessage
 		bottomMessage = strings.ReplaceAll(bottomMessage, "{year}", strconv.Itoa(year))
+		bottomMessage = strings.ReplaceAll(bottomMessage, "{mi}", strconv.Itoa(individualData.Miles))
+		bottomMessage = strings.ReplaceAll(bottomMessage, "{ch}", strconv.Itoa(individualData.Chains))
 
 		// Update the Rich Presence
 		err := client.SetActivity(client.Activity{
