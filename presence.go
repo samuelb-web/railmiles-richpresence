@@ -282,7 +282,7 @@ func main() {
 
 	// Start cron loop to update miles
 	c := cron.New()
-	c.AddFunc("15,45 * * * *", func() {
+	c.AddFunc("0 15,45 * * * *", func() {
 		log.Println("Updating miles...")
 		updateMiles(config)
 	})
