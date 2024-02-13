@@ -60,6 +60,23 @@ type Config struct {
 		BottomSoloMessage   string `yaml:"bottomSoloMessage"`
 		BottomLeagueMessage string `yaml:"bottomLeagueMessage"`
 	} `yaml:"messages"`
+
+	Buttons struct {
+		UserLink struct {
+			Visible bool   `yaml:"visible"`
+			Message string `yaml:"message"`
+		} `yaml:"userLink"`
+
+		LeagueLink struct {
+			Visible bool   `yaml:"visible"`
+			Message string `yaml:"message"`
+		} `yaml:"leagueLink"`
+	} `yaml:"buttons"`
+
+	ImageKeys struct {
+		Large string `yaml:"largeImage"`
+		Small string `yaml:"smallImage"`
+	} `yaml:"imageKeys"`
 }
 
 func getPositionSuffix(position int) string {
@@ -194,25 +211,32 @@ func updateMiles(config Config) {
 		bottomMessage = strings.ReplaceAll(bottomMessage, "{ch}", strconv.Itoa(leagueData.CurrentUser.Chains))
 		bottomMessage = strings.ReplaceAll(bottomMessage, "{year}", strconv.Itoa(year))
 
-		// Update the Rich Presence
-		err := client.SetActivity(client.Activity{
+		activity := client.Activity{
 			State:   bottomMessage,
 			Details: topMessage,
 
-			LargeImage: "dsc_027-e",
+			LargeImage: config.ImageKeys.Large,
+			SmallImage: config.ImageKeys.Small,
 
-			Buttons: []*client.Button{
-				{
-					Label: "My RailMiles",
-					Url:   config.RailmilesUrl,
-				},
+			Buttons: []*client.Button{},
+		}
 
-				{
-					Label: "View League",
-					Url:   ("https://my.railmiles.me/leagues/" + strconv.Itoa(config.League)),
-				},
-			},
-		})
+		if config.Buttons.UserLink.Visible {
+			activity.Buttons = append(activity.Buttons, &client.Button{
+				Label: config.Buttons.UserLink.Message,
+				Url:   config.RailmilesUrl,
+			})
+		}
+
+		if config.Buttons.LeagueLink.Visible {
+			activity.Buttons = append(activity.Buttons, &client.Button{
+				Label: config.Buttons.LeagueLink.Message,
+				Url:   ("https://my.railmiles.me/leagues/" + strconv.Itoa(config.League)),
+			})
+		}
+
+		// Update the Rich Presence
+		err := client.SetActivity(activity)
 
 		if err != nil {
 			log.Fatalf("Error updating Rich Presence: %s\n", err.Error())
@@ -234,20 +258,25 @@ func updateMiles(config Config) {
 		bottomMessage = strings.ReplaceAll(bottomMessage, "{mi}", strconv.Itoa(individualData.Miles))
 		bottomMessage = strings.ReplaceAll(bottomMessage, "{ch}", strconv.Itoa(individualData.Chains))
 
-		// Update the Rich Presence
-		err := client.SetActivity(client.Activity{
+		activity := client.Activity{
 			State:   bottomMessage,
 			Details: topMessage,
 
-			LargeImage: "dsc_027-e",
+			LargeImage: config.ImageKeys.Large,
+			SmallImage: config.ImageKeys.Small,
 
-			Buttons: []*client.Button{
-				{
-					Label: "My RailMiles",
-					Url:   config.RailmilesUrl,
-				},
-			},
-		})
+			Buttons: []*client.Button{},
+		}
+
+		if config.Buttons.UserLink.Visible {
+			activity.Buttons = append(activity.Buttons, &client.Button{
+				Label: config.Buttons.UserLink.Message,
+				Url:   config.RailmilesUrl,
+			})
+		}
+
+		// Update the Rich Presence
+		err := client.SetActivity(activity)
 
 		if err != nil {
 			log.Fatalf("Error updating Rich Presence: %s\n", err.Error())

@@ -11,3 +11,16 @@ messages:
   bottomSoloMessage: "{place} place - {mi}mi and {ch}ch in {year}"
   topLeagueMessage: "{place} place - {mi}mi and {ch}ch in {year}"
   bottomLeagueMessage: "Competing in {leagueName}"
+
+buttons:
+  userLink:
+    visible: true
+    message: "My RailMiles"
+  leagueLink: 
+    visible: true # Setting will only work in league mode
+    message: "View League"
+
+
+imageKeys:   # Custom application image keys 
+  largeImage: "dsc_027-e"
+  smallImage: ""
