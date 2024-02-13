@@ -345,9 +345,6 @@ func main() {
 		return
 	}
 
-	// Create system tray icon
-	systray.Run(func() { trayReady(config) }, func() {})
-
 	// Update the miles
 	updateMiles(config)
 
@@ -357,6 +354,9 @@ func main() {
 		log.Println("Updating miles...")
 		updateMiles(config)
 	})
+
+	// Create system tray icon
+	systray.Run(func() { trayReady(config) }, func() {})
 
 	go c.Start()
 
