@@ -8,7 +8,7 @@ league: 0    # If mode is league, this is the league ID
 
 messages:
   topSoloMessage: "{mi} miles and {ch} chains"
-  bottomSoloMessage: "{place} place - {mi}mi and {ch}ch in {year}"
+  bottomSoloMessage: "Logging RailMiles in {year}"
   topLeagueMessage: "{place} place - {mi}mi and {ch}ch in {year}"
   bottomLeagueMessage: "Competing in {leagueName}"
 
