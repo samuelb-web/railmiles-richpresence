@@ -14,6 +14,7 @@ import (
 
 	"net/http"
 
+	"github.com/allan-simon/go-singleinstance"
 	"github.com/samuelb-web/railmiles-richpresence/icon"
 
 	"github.com/PuerkitoBio/goquery"
@@ -321,6 +322,18 @@ func trayReady(config Config) {
 
 // Entrypoint
 func main() {
+
+	// Create a .lock file
+	lockFile, err := singleinstance.CreateLockFile("plop.lock")
+
+	// Check if a .lock file already exists
+	if err != nil {
+		log.Println("An instance already exists")
+		return
+	}
+
+	/*defer lockFile.Close()*/
+
 	// Load the configuration file
 	log.Println("Loading configuration file...")
 	var config Config
@@ -366,4 +379,5 @@ func main() {
 	signal.Notify(sig, os.Interrupt, os.Kill)
 	<-sig
 	systray.Quit()
+	lockFile.Close()
 }
