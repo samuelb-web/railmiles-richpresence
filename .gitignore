@@ -1,6 +1,9 @@
 # railmiles-richpresence specific files
 config.yaml
 
+# lock file
+plop.lock
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
