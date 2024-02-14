@@ -13,3 +13,4 @@ This application pulls your RailMiles data (individual or league) and displays i
 ## Notes
 - Data will automatically be updated at xx:15 and xx:45 every hour
 - League data will only be pulled hourly due to restrictions with RailMiles
+- The RailMiles URL inside of your config.yaml file will need to contain https:// and a trailing / (https://username.railmiles.me/)
