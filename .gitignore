@@ -2,7 +2,7 @@
 config.yaml
 
 # lock file
-plop.lock
+*.lock
 
 # Binaries for programs and plugins
 *.exe
